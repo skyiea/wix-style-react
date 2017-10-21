@@ -230,7 +230,8 @@ Input.defaultProps = {
   textOverflow: 'clip',
   maxLength: 524288,
   width: 'initial',
-  withSelection: false
+  withSelection: false,
+  clearButton: false
 };
 
 Input.propTypes = {
