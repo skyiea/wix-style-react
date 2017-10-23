@@ -1,14 +1,17 @@
 import React from 'react';
 import ReactTestUtils from 'react-dom/test-utils';
+import {mount} from 'enzyme';
+
 import inputWithOptionsDriverFactory from './InputWithOptions.driver';
 import InputWithOptions from './InputWithOptions';
 import {createDriverFactory} from '../test-common';
+import {makeControlled} from '../../test/utils';
 import {inputWithOptionsTestkitFactory} from '../../testkit';
 import {inputWithOptionsTestkitFactory as enzymeInputWithOptionsTestkitFactory} from '../../testkit/enzyme';
-import {mount} from 'enzyme';
 
 const runInputWithOptionsTest = driverFactory => {
   describe('InputWithOptions', () => {
+    const ControlledInputWithOptions = makeControlled(InputWithOptions);
 
     const createDriver = createDriverFactory(driverFactory);
     const options = [
@@ -37,6 +40,78 @@ const runInputWithOptionsTest = driverFactory => {
       const {driver, dropdownLayoutDriver} = createDriver(<InputWithOptions options={options}/>);
       driver.focus();
       expect(dropdownLayoutDriver.isShown()).toBeTruthy();
+    });
+
+    describe('showOptionsIfEmptyInput property', () => {
+      describe('show options if input is empty (default behaviour)', () => {
+        it('should show DropdownLayout if input is empty and focused', () => {
+          const driver = createDriver(
+            <ControlledInputWithOptions
+              showOptionsIfEmptyInput
+              options={options}
+              />
+          );
+
+          driver.inputDriver.focus();
+          expect(driver.dropdownLayoutDriver.isShown()).toBe(true);
+        });
+      });
+
+      describe('do not show options if input is empty', () => {
+        it('should not show DropdownLayout if input is empty and focused', () => {
+          const driver = createDriver(
+            <ControlledInputWithOptions
+              showOptionsIfEmptyInput={false}
+              options={options}
+              />
+          );
+
+          driver.inputDriver.focus();
+          expect(driver.dropdownLayoutDriver.isShown()).toBe(false);
+        });
+
+        it('should show DropdownLayout if text was entered', () => {
+          const driver = createDriver(
+            <ControlledInputWithOptions
+              showOptionsIfEmptyInput={false}
+              options={options}
+              />
+          );
+
+          expect(driver.dropdownLayoutDriver.isShown()).toBe(false);
+          driver.inputDriver.focus();
+          expect(driver.dropdownLayoutDriver.isShown()).toBe(false);
+          driver.inputDriver.enterText('some value');
+          expect(driver.dropdownLayoutDriver.isShown()).toBe(true);
+        });
+
+        it('should not show DropdownLayout if input was emptied', () => {
+          const driver = createDriver(
+            <ControlledInputWithOptions
+              showOptionsIfEmptyInput={false}
+              options={options}
+              />
+          );
+
+          driver.inputDriver.enterText('some value');
+          driver.inputDriver.clearText();
+          expect(driver.dropdownLayoutDriver.isShown()).toBe(false);
+        });
+
+        it('should not show DropdownLayout if input is empty and no char was produced by keypress', () => {
+          const driver = createDriver(
+            <ControlledInputWithOptions
+              showOptionsIfEmptyInput={false}
+              options={options}
+              />
+          );
+
+          driver.inputDriver.trigger('keyDown', {
+            key: 37  // <Left Arrow> key code
+          });
+          expect(driver.dropdownLayoutDriver.isShown()).toBe(false);
+        });
+      });
     });
 
     it('should show DropdownLayout on any key press', () => {
@@ -120,16 +195,34 @@ const runInputWithOptionsTest = driverFactory => {
       expect(dropdownLayoutDriver.isShown()).toBe(false);
     });
 
-    it('should stay focused on tab key press with closeOnSelect=false', () => {
-      const onManuallyInput = jest.fn();
-      const {driver, inputDriver, dropdownLayoutDriver} = createDriver(<InputWithOptions options={options} onManuallyInput={onManuallyInput} closeOnSelect={false}/>);
-      inputDriver.focus();
-      inputDriver.enterText('Option 1');
-      driver.pressDownKey();
-      expect(inputDriver.isFocus()).toBe(true);
-      driver.pressTabKey();
-      expect(inputDriver.isFocus()).toBe(true);
-      expect(dropdownLayoutDriver.isShown()).toBe(true);
+    describe('closeOnSelect property', () => {
+      it('should stay focused on tab key press (when closeOnSelect=false)', () => {
+        const onManuallyInput = jest.fn();
+        const {driver, inputDriver, dropdownLayoutDriver} = createDriver(<InputWithOptions options={options} onManuallyInput={onManuallyInput} closeOnSelect={false}/>);
+        inputDriver.focus();
+        inputDriver.enterText('Option 1');
+        driver.pressDownKey();
+        expect(inputDriver.isFocus()).toBe(true);
+        driver.pressTabKey();
+        expect(inputDriver.isFocus()).toBe(true);
+        expect(dropdownLayoutDriver.isShown()).toBe(true);
+      });
+
+      it('should hide options on option select (when closeOnSelect=true)', () => {
+        const driver = createDriver(
+          <ControlledInputWithOptions
+            options={options}
+            closeOnSelect
+            onSelect={function (option) {
+              this.setState({value: option.value});
+            }}
+            />
+        );
+
+        driver.inputDriver.focus();
+        driver.dropdownLayoutDriver.clickAtOption(0);
+        expect(driver.dropdownLayoutDriver.isShown()).toBe(false);
+      });
     });
 
     it('should suggest an option when calling onManuallyInput', () => {

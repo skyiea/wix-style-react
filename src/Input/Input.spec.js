@@ -7,33 +7,11 @@ import {createDriverFactory} from '../test-common';
 import {inputTestkitFactory, tooltipTestkitFactory} from '../../testkit';
 import {inputTestkitFactory as enzymeInputTestkitFactory} from '../../testkit/enzyme';
 import {isTestkitExists, isEnzymeTestkitExists} from '../../testkit/test-common';
+import {makeControlled} from '../../test/utils/utils';
 
 describe('Input', () => {
   const createDriver = createDriverFactory(inputDriverFactory);
-
-  class ControlledInput extends React.Component {
-    static propTypes = {
-      value: Input.propTypes.value
-    };
-
-    constructor(props) {
-      super(props);
-
-      this.state = {
-        value: props.value || ''
-      };
-    }
-
-    render() {
-      return (
-        <Input
-          {...this.props}
-          value={this.state.value}
-          onChange={e => this.setState({value: e.target.value})}
-          />
-      );
-    }
-  }
+  const ControlledInput = makeControlled(Input);
 
   describe('test tooltip', () => {
     const resolveIn = timeout =>

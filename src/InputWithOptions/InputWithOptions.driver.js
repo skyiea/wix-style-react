@@ -27,7 +27,12 @@ const inputWithOptionsDriverFactory = ({element, wrapper, component}) => {
       ReactDOM.render(<div ref={r => element = r}>{ClonedWithProps}</div>, wrapper);
     }
   };
-  return {driver, inputDriver, dropdownLayoutDriver};
+  return {
+    exists: () => driver.exists(),
+    driver,
+    inputDriver,
+    dropdownLayoutDriver
+  };
 };
 
 export default inputWithOptionsDriverFactory;

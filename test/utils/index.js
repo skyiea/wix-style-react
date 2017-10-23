@@ -1,1 +1,4 @@
-export {isClassExists} from './utils';
+export {
+  isClassExists,
+  makeControlled
+} from './utils';

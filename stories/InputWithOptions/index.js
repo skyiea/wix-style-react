@@ -16,6 +16,9 @@ import ExampleDropdownSizeRaw from '!raw-loader!./ExampleDropdownSize';
 import ExampleControlled from './ExampleControlled';
 import ExampleControlledRaw from '!raw-loader!./ExampleControlled';
 
+import ExampleNoDropdownIfEmptyInput from './ExampleNoDropdownIfEmptyInput';
+import ExampleNoDropdownIfEmptyInputRaw from '!raw-loader!./ExampleNoDropdownIfEmptyInput';
+
 storiesOf('Core', module)
   .add('InputWithOptions', () => (
     <TabbedView tabs={['API', 'Testkit']}>
@@ -30,6 +33,10 @@ storiesOf('Core', module)
 
         <CodeExample title="Dropdown size" code={ExampleDropdownSizeRaw}>
           <ExampleDropdownSize/>
+        </CodeExample>
+
+        <CodeExample title="No dropdown if input is empty" code={ExampleNoDropdownIfEmptyInputRaw}>
+          <ExampleNoDropdownIfEmptyInput/>
         </CodeExample>
 
         <CodeExample title="Controlled input" code={ExampleControlledRaw}>

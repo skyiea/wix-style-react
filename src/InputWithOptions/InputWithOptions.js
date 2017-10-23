@@ -45,6 +45,13 @@ class InputWithOptions extends WixComponent {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (!this.props.showOptionsIfEmptyInput &&
+        (prevProps.value !== this.props.value || prevState.inputValue !== this.state.inputValue)) {
+      this.showOptions();
+    }
+  }
+
   onCompositionChange(isComposing) {
     this.setState({isComposing});
   }
@@ -76,6 +83,8 @@ class InputWithOptions extends WixComponent {
     if (this.props.dropdownWidth) {
       customStyle.width = this.props.dropdownWidth;
     }
+    const isDropdownLayoutVisible = this.state.showOptions &&
+      (this.props.showOptionsIfEmptyInput || this.state.inputValue.length > 0);
 
     return (
       <div className={this.dropdownClasses()} style={customStyle}>
@@ -83,7 +92,7 @@ class InputWithOptions extends WixComponent {
           ref={dropdownLayout => this.dropdownLayout = dropdownLayout}
           {...dropdownProps}
           theme={this.props.theme}
-          visible={this.state.showOptions}
+          visible={isDropdownLayoutVisible}
           onClose={this.hideOptions}
           onSelect={this._onSelect}
           isComposing={this.state.isComposing}
@@ -237,7 +246,8 @@ InputWithOptions.defaultProps = {
   inputElement: <Input/>,
   valueParser: option => option.value,
   dropdownWidth: null,
-  dropdownOffsetLeft: '0'
+  dropdownOffsetLeft: '0',
+  showOptionsIfEmptyInput: true
 };
 
 InputWithOptions.propTypes = {
@@ -248,7 +258,9 @@ InputWithOptions.propTypes = {
   onManuallyInput: PropTypes.func,
   valueParser: PropTypes.func,
   dropdownWidth: PropTypes.string,
-  dropdownOffsetLeft: PropTypes.string
+  dropdownOffsetLeft: PropTypes.string,
+  /** Controls whether to show options if input is empty */
+  showOptionsIfEmptyInput: PropTypes.bool
 };
 
 InputWithOptions.displayName = 'InputWithOptions';
