@@ -90,7 +90,7 @@ class Tooltip extends WixComponent {
     showDelay: 200,
     hideDelay: 0,
     zIndex: 2000,
-    maxWidth: '378px',
+    maxWidth: '204px',
     onClickOutside: null,
     onShow: null,
     onHide: null,
@@ -100,7 +100,7 @@ class Tooltip extends WixComponent {
     children: null,
     size: 'normal',
     shouldCloseOnClickOutside: false,
-    textAlign: 'center',
+    textAlign: 'left',
     relative: false
   };
 

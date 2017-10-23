@@ -40,6 +40,11 @@ const tooltipDriverFactory = ({element, wrapper}) => {
       const values = content.style._values;
       return values['max-width'];
     },
+    getAlignment: () => {
+      const content = document.body.querySelector('.tooltip');
+      const values = content.style._values;
+      return values['text-align'];
+    },
     getPadding: () => {
       const content = document.body.querySelector('.tooltip');
       const values = content.style._values;

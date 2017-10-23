@@ -19,7 +19,8 @@ export default class ComponentMetaInfoGetter extends React.PureComponent {
       source: undefined,
       readmeTestKit: undefined,
       component: undefined,
-      parsedSource: undefined
+      parsedSource: undefined,
+      readme: undefined
     };
   }
 
@@ -42,13 +43,14 @@ export default class ComponentMetaInfoGetter extends React.PureComponent {
       this.getComponentInstance(),
       this.getParsedSource(componentSourcePromise),
       this.getComponentReadme()
-    ]).then(([source, readmeTestKit, component, parsedSource]) => {
+    ]).then(([source, readmeTestKit, component, parsedSource, readme]) => {
       this.setState({
         isLoading: false,
         source,
         readmeTestKit,
         component,
-        parsedSource
+        parsedSource,
+        readme
       });
     });
   }
@@ -91,8 +93,8 @@ export default class ComponentMetaInfoGetter extends React.PureComponent {
 
       return this.getAllPropTypesFromParsedSource(parsedSource).then(collectedProps => {
         parsedSource.props = {
-          ...collectedProps,
-          ...parsedSource.props
+          ...parsedSource.props,
+          ...collectedProps
         };
         return parsedSource;
       });
