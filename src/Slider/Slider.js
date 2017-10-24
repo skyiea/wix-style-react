@@ -58,6 +58,7 @@ export default class Slider extends Component {
           value={this.props.value}
           marks={marks}
           step={this.props.step}
+          pushable={this.props.pushable}
           onChange={this.props.onChange}
           onAfterChange={this.props.onAfterChange}
           allowCross={this.props.allowCross}
@@ -98,6 +99,10 @@ Slider.propTypes = {
 
   /** The slider's step */
   step: PropTypes.number,
+
+  /** Allow pushing of surrounding handles when moving a handle */
+  /** Number means a minimum distance between handles */
+  pushable: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
 
   /** The slider's selected range */
   value: PropTypes.arrayOf(PropTypes.number)
