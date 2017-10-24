@@ -72,6 +72,7 @@ import '../stories/Tabs';
 // require('../stories/Tooltip/Composite/CompositeStory');
 import '../stories/Tooltip_New/Composite/CompositeStory';
 import '../stories/Notification';
+import '../stories/Search';
 
 import '../stories/MessageBox';
 import '../stories/Modal';
