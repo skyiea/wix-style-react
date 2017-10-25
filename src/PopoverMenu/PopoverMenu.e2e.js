@@ -6,9 +6,9 @@ import {
 const EC = protractor.ExpectedConditions;
 
 import {
-    popoverMenuTestkitFactory,
-    getStoryUrl,
-    waitForVisibilityOf
+  popoverMenuTestkitFactory,
+  getStoryUrl,
+  waitForVisibilityOf
 } from '../../testkit/protractor';
 
 describe('PopoverMenu', () => {

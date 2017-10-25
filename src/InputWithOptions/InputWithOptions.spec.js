@@ -330,6 +330,38 @@ const runInputWithOptionsTest = driverFactory => {
       expect(onManualInput).toBeCalled();
     });
 
+    // TODO
+    it.skip('should change input value when an option is pressed', () => {
+      const driver = createDriver(
+        <InputWithOptions
+          options={options}
+          />
+      );
+      driver.inputDriver.focus();
+
+      const OPTION_INDEX = 0;
+      driver.dropdownLayoutDriver.clickAtOption(OPTION_INDEX);
+      expect(driver.inputDriver.getValue()).toBe(options[OPTION_INDEX].value);
+    });
+
+    // TODO
+    it.skip('should invoke onChange with proper event object when an option is pressed', () => {
+      const onChange = jest.fn();
+      const driver = createDriver(
+        <InputWithOptions
+          options={options}
+          value="some value"
+          onChange={onChange}
+          />
+      );
+      driver.inputDriver.focus();
+
+      const OPTION_INDEX = 0;
+      driver.dropdownLayoutDriver.clickAtOption(OPTION_INDEX);
+      expect(onChange).toBeCalled();
+      expect(onChange.mock.calls[0][0].target.value).toBe(options[OPTION_INDEX].value);
+    });
+
     describe('testkit', () => {
       it('should exist', () => {
         const div = document.createElement('div');
