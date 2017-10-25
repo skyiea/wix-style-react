@@ -16,7 +16,7 @@ class InputWithOptions extends WixComponent {
   constructor(props) {
     super(props);
     this.state = {
-      inputValue: '',
+      inputValue: props.value || '',
       showOptions: false,
       lastOptionsShow: 0,
       isEditing: false
@@ -47,7 +47,7 @@ class InputWithOptions extends WixComponent {
 
   componentDidUpdate(prevProps, prevState) {
     if (!this.props.showOptionsIfEmptyInput &&
-        (prevProps.value !== this.props.value || prevState.inputValue !== this.state.inputValue)) {
+        ((!prevProps.value && this.props.value) || (!prevState.inputValue && this.state.inputValue))) {
       this.showOptions();
     }
   }

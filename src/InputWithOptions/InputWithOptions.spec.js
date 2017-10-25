@@ -70,6 +70,20 @@ const runInputWithOptionsTest = driverFactory => {
           expect(driver.dropdownLayoutDriver.isShown()).toBe(false);
         });
 
+        it('should show DropdownLayout if initial value passed and input focused', () => {
+          const driver = createDriver(
+            <ControlledInputWithOptions
+              showOptionsIfEmptyInput={false}
+              value={options[0].value}
+              options={options}
+              />
+          );
+
+          expect(driver.dropdownLayoutDriver.isShown()).toBe(false);
+          driver.inputDriver.focus();
+          expect(driver.dropdownLayoutDriver.isShown()).toBe(true);
+        });
+
         it('should show DropdownLayout if text was entered', () => {
           const driver = createDriver(
             <ControlledInputWithOptions
@@ -109,6 +123,24 @@ const runInputWithOptionsTest = driverFactory => {
           driver.inputDriver.trigger('keyDown', {
             key: 37  // <Left Arrow> key code
           });
+          expect(driver.dropdownLayoutDriver.isShown()).toBe(false);
+        });
+
+        it('should hide options on option select', () => {
+          const driver = createDriver(
+            <ControlledInputWithOptions
+              value="some value"
+              showOptionsIfEmptyInput={false}
+              options={options}
+              closeOnSelect
+              onSelect={function (option) {
+                this.setState({value: option.value});
+              }}
+              />
+          );
+
+          driver.inputDriver.focus();
+          driver.dropdownLayoutDriver.clickAtOption(0);
           expect(driver.dropdownLayoutDriver.isShown()).toBe(false);
         });
       });

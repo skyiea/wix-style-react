@@ -29,8 +29,7 @@ export default class Search extends WixComponent {
     super(props);
 
     this.state = {
-      // used when component is uncontrolled as a substitute for this.props.value, which is required to construct proper filter predicate
-      inputValue: props.value || props.defaultValue || ''
+      inputValue: (!this._isControlled && props.defaultValue) || ''
     };
   }
 
@@ -72,24 +71,17 @@ export default class Search extends WixComponent {
     onClear && onClear();
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.value !== this.props.value) {
-      this.setState({
-        inputValue: nextProps.value
-      });
-    }
-  }
-
   render() {
     return (
       <InputWithOptions
-        placeholder="Search"  // TODO: Localization?
+        placeholder="Search"
         {...this.props}
         ref="searchInput"
         roundInput
         prefix={<div className={styles.leftIcon}><Search2/></div>}
         menuArrow={false}
         clearButton
+        closeOnSelect
         showOptionsIfEmptyInput={false}
         options={this._filteredOptions}
         onClear={this._onClear}
