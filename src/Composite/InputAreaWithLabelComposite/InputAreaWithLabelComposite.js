@@ -6,6 +6,10 @@ import styles from './InputAreaWithLabelComposite.scss';
 import FieldLabelAttributes from '../../FieldLabelAttributes/FieldLabelAttributes';
 
 class InputAreaWithLabelComposite extends WixComponent {
+  getFieldLabelAttributesComponent() {
+    return <FieldLabelAttributes appendToParent={this.props.appendToParent} required={this.props.required} info={this.props.info}/>;
+  }
+
   render() {
     const children = Children.toArray(this.props.children);
     return (
@@ -13,10 +17,21 @@ class InputAreaWithLabelComposite extends WixComponent {
         { children.length === 2 ?
           <div className={styles.label}>
             {children[0]}
-            { this.props.required || this.props.info ? <FieldLabelAttributes appendToParent={this.props.appendToParent} required={this.props.required} info={this.props.info}/> : null }
+            { this.props.required || this.props.info ? this.getFieldLabelAttributesComponent() : null }
           </div> : null
         }
-        { last(children) }
+        { children.length === 1 && (this.props.required || this.props.info) ?
+          (
+            <div className={styles.withLabelAttributes}>
+              <div className={styles.inputWrapper}>
+                { last(children) }
+              </div>
+              {this.getFieldLabelAttributesComponent()}
+            </div>
+          ) : (
+            last(children)
+          )
+        }
       </div>
     );
   }

@@ -3,3 +3,12 @@
 .label {
 	margin-bottom: 6px;
 }
+
+.withLabelAttributes {
+	display: flex;
+	align-items: center;
+}
+
+.inputWrapper {
+	flex: 1;
+}

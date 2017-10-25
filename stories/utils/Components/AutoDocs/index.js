@@ -117,7 +117,7 @@ const AutoDocs = ({source = '', parsedSource, showTitle}) => {
         <tbody>
           { prepareParsedProps(props).map(propRow) }
 
-          { composes.length > 0 &&
+          { !parsedSource && composes.length > 0 &&
             <tr>
               <td colSpan={5}>
                 Also includes props from:

@@ -19,20 +19,28 @@ class ControlledGoogleAddressInput extends Component {
   constructor({value}) {
     super();
     this.state = {value};
+    this.onSet = this.onSet.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
+
+  onSet(event) {
+    event && this.setState({value: event.originValue});
+  }
+
+  onChange(event) {
+    event && this.setState({value: event.target.value});
   }
 
   render() {
-    const onSet = event => event && this.setState({value: event.originValue});
-    const onChange = event => event && this.setState({value: event.target.value});
-
     return (
       <GoogleAddressInput
         {...this.props}
         value={this.state.value}
-        onSet={onSet}
-        onChange={onChange}
+        onSet={this.onSet}
+        onChange={this.onChange}
         placeholder="Enter Address..."
         Client={clients.GoogleMapsClient}
+        fallbackToManual
         />
     );
   }
@@ -41,6 +49,6 @@ class ControlledGoogleAddressInput extends Component {
 export default () =>
   <div>
     <div style={style} className="ltr">
-      <ControlledGoogleAddressInput countryCode="US"/>
+      <ControlledGoogleAddressInput/>
     </div>
   </div>;

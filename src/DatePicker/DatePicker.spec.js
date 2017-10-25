@@ -276,6 +276,39 @@ describe('DatePicker', () => {
       expect(newDate.month()).toEqual(8);
     });
 
+    it('should show calendar in provided locale', () => {
+      const date = moment(new Date(2015, 9, 2));
+      const {calendarDriver, inputDriver} = createDriver(
+        <DatePicker
+          onChange={onChange}
+          locale="fr"
+          value={date}
+          />
+      );
+
+      inputDriver.trigger('click');
+      calendarDriver.clickOnPrevMonthButton();
+
+      expect(calendarDriver.getNthWeekDayName(0)).toEqual('Lu');
+      expect(calendarDriver.getNthWeekDayName(6)).toEqual('Di');
+      expect(calendarDriver.getCurrentMonthWithYear()).toEqual('septembre 2015');
+      expect(inputDriver.getValue()).toBe('02/10/2015');
+    });
+
+    it('should show date in provided format instead of locale format', () => {
+      const date = new Date(2017, 9, 2);
+      const {inputDriver} = createDriver(
+        <DatePicker
+          onChange={onChange}
+          locale="fr"
+          dateFormat="YYYY/MM/DD"
+          value={moment(date)}
+          />
+      );
+
+      expect(inputDriver.getValue()).toBe('2017/10/02');
+    });
+
     it('should select previous month on next month button click', () => {
       const date = moment(new Date(2015, 9, 2));
       const {calendarDriver, inputDriver} = createDriver(

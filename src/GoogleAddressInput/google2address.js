@@ -4,6 +4,10 @@ export const includes = (arr, value) => {
   return Boolean(arr && arr.find(item => item === value)); // we compare only primitives
 };
 
+const locationFuncOrValue = locationProp => {
+  return typeof locationProp === 'function' ? locationProp() : locationProp;
+};
+
 export function google2address(google) {
   const components = {};
   google.address_components.forEach(({types, long_name, short_name}) => {
@@ -13,11 +17,13 @@ export function google2address(google) {
   });
 
   const locality = components.locality || components.sublocality || components.postal_town;
+  const {lat, lng} = google.geometry.location;
+
   const result = {
     formatted: google.formatted_address,
     latLng: {
-      lat: google.geometry.location.lat(),
-      lng: google.geometry.location.lng()
+      lat: locationFuncOrValue(lat),
+      lng: locationFuncOrValue(lng)
     },
     approximate: (!includes(google.types, 'street_address') && (!includes(google.types, 'premise'))),
     city: locality && locality.long_name,
@@ -26,7 +32,8 @@ export function google2address(google) {
     countryCode: components.country && components.country.short_name,
     street: components.route && components.route.long_name,
     number: components.street_number && components.street_number.long_name,
-    postalCode: components.postal_code && components.postal_code.long_name
+    postalCode: components.postal_code && components.postal_code.long_name,
+    subpremise: components.subpremise && components.subpremise.long_name
   };
 
   for (const key in result) {

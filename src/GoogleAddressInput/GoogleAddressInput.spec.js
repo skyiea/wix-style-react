@@ -12,6 +12,22 @@ GEOCODE_RESULT.geometry = {
   }
 };
 
+const buildResult = originValue => {
+  return {
+    originValue,
+    googleResult: GEOCODE_RESULT,
+    address: {
+      approximate: true,
+      latLng: {
+        lat: 31.12,
+        lng: 33.34
+      },
+      number: 123,
+      formatted: '_formatted_address_'
+    }
+  };
+};
+
 export class GmapsTestClient {
   autocomplete({request}) {
 
@@ -142,19 +158,7 @@ describe('GoogleAddressInput', () => {
       // Defer to make sure all promises run
       _.defer(() => {
         try {
-          expect(onSet.args[0][0]).toEqual({
-            originValue: 'my address',
-            googleResult: GEOCODE_RESULT,
-            address: {
-              approximate: true,
-              latLng: {
-                lat: 31.12,
-                lng: 33.34
-              },
-              number: 123,
-              formatted: '_formatted_address_'
-            }
-          });
+          expect(onSet.args[0][0]).toEqual(buildResult('my address'));
           done();
         } catch (e) {
           done.fail(e);
@@ -172,19 +176,7 @@ describe('GoogleAddressInput', () => {
       // Defer to make sure all promises run
       _.defer(() => {
         try {
-          expect(onSet.args[0][0]).toEqual({
-            originValue: '{"components":"country:XX","input":"my addr"} - 1', // The first suggestion
-            googleResult: GEOCODE_RESULT,
-            address: {
-              approximate: true,
-              latLng: {
-                lat: 31.12,
-                lng: 33.34
-              },
-              number: 123,
-              formatted: '_formatted_address_'
-            }
-          });
+          expect(onSet.args[0][0]).toEqual(buildResult('{"components":"country:XX","input":"my addr"} - 1'));
           done();
         } catch (e) {
           done.fail(e);
@@ -202,6 +194,23 @@ describe('GoogleAddressInput', () => {
       _.defer(() => {
         try {
           expect(onSet.args[0][0]).toEqual(null);
+          done();
+        } catch (e) {
+          done.fail(e);
+        }
+      });
+    });
+
+    it('If user pressed <enter> and there is no value on the suggestions list and fallbackToManual is set to true, search for the value anyway', done => {
+      const onSet = sinon.spy();
+      const component = createShallow({Client: GmapsTestClient, countryCode: 'YY', onSet, fallbackToManual: true});
+      component.setState({suggestions: []});
+      component.find('InputWithOptions').props().onManuallyInput('some address with apartment');
+
+      // Defer to make sure all promises run
+      _.defer(() => {
+        try {
+          expect(onSet.args[0][0]).toEqual(buildResult('{"components":"country:YY","input":"some address with apartment"} - 1'));
           done();
         } catch (e) {
           done.fail(e);

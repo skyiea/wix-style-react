@@ -27,6 +27,12 @@ describe('google 2 address', () => {
     expect(google2address(aGoogleResponse({components: [component]})).state).toEqual(someState);
   });
 
+  it('should set the subpremise', () => {
+    const aptNumber = '16';
+    const component = aComponent(aptNumber, null, 'subpremise');
+    expect(google2address(aGoogleResponse({components: [component]})).subpremise).toEqual(aptNumber);
+  });
+
   describe('city', () => {
     const someLocality = 'some-locality';
     const someSublocality = 'some-sublocality';
@@ -90,9 +96,20 @@ describe('google 2 address', () => {
     expect(google2address(aGoogleResponse({formatted: someFormattedAddress})).formatted).toEqual(someFormattedAddress);
   });
 
-  it('should set latLng according to geometry', () => {
+  it('should set latLng according to geometry when they are functions', () => {
     const someGeometry = aGeometry(100, 22);
     expect(google2address(aGoogleResponse({geometry: someGeometry})).latLng).toEqual({lng: 22, lat: 100});
+  });
+
+  it('should be able to accept lagLng as numbers', () => {
+    const geometry = {
+      location: {
+        lat: 777,
+        lng: 666
+      }
+    };
+
+    expect(google2address(aGoogleResponse({geometry})).latLng).toEqual({lng: 666, lat: 777});
   });
 
   it('should set approximate if street_address is not in types', () => {

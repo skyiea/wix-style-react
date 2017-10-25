@@ -35,6 +35,8 @@ datePickerPolyfills(window, global);
 | clickOnNthYear | number | - | select Nth year (should start with 1 because of additional control arrows) |
 | clickOnPrevMonthButton | - | - | clicks on previous month button |
 | clickOnNextMonthButton | - | - | clicks on next month button |
+| getCurrentMonthWithYear | - | string | returns the month and year |
+| getNthWeekDayName | number | string | returns the n'th day name in the week |
 
 ### Usage Example
 

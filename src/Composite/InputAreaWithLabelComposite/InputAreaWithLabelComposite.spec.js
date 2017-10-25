@@ -52,8 +52,20 @@ describe('InputAreaWithLabelComposite', () => {
       expect(driver.hasFieldLabelAttributes()).toBe(true);
     });
 
+    it('should FieldLabelAttributes exists if required and with one child', () => {
+      const driver = createAutoCompleteDriver(<InputAreaWithLabelComposite required><InputArea/></InputAreaWithLabelComposite>);
+
+      expect(driver.hasFieldLabelAttributes()).toBe(true);
+    });
+
     it('should FieldLabelAttributes exists if info', () => {
       const driver = createAutoCompleteDriver(<InputAreaWithLabelComposite info="info"><Label>label</Label><InputArea/></InputAreaWithLabelComposite>);
+
+      expect(driver.hasFieldLabelAttributes()).toBe(true);
+    });
+
+    it('should FieldLabelAttributes exists if info and with one child', () => {
+      const driver = createAutoCompleteDriver(<InputAreaWithLabelComposite info="info"><InputArea/></InputAreaWithLabelComposite>);
 
       expect(driver.hasFieldLabelAttributes()).toBe(true);
     });
