@@ -100,8 +100,7 @@ Slider.propTypes = {
   /** The slider's step */
   step: PropTypes.number,
 
-  /** Allow pushing of surrounding handles when moving a handle */
-  /** Number means a minimum distance between handles */
+  /** Allow pushing of surrounding handles when moving a handle. Number means a minimum distance between handles */
   pushable: PropTypes.oneOfType([PropTypes.bool, PropTypes.number]),
 
   /** The slider's selected range */
