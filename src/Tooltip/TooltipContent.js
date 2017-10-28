@@ -68,7 +68,7 @@ class TooltipContent extends Component {
   static defaultProps = {
     theme: 'light',
     arrowPlacement: 'bottom',
-    maxWidth: '204px',
+    maxWidth: '378px',
     size: 'normal',
     textAlign: 'center'
   };
